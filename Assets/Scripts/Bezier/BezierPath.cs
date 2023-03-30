@@ -41,20 +41,36 @@ public class BezierPath : MonoBehaviour
 
         Quaternion rot = Quaternion.LookRotation(tDir);
         Handles.PositionHandle(tPos, rot);
-
-        for(int i =0; i< road2D.vertices.Length; i++)
+        int currIndex = 0;
+        foreach (var point in points)
         {
-            Vector3 roadPoint = road2D.vertices[i].point;
-            Gizmos.DrawSphere(tPos + rot * roadPoint, 0.25f);
-        }
+            if (currIndex == points.Length - 1)
+                break;
 
-        ////Draw some points with respect to the t-position...
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawSphere(tPos + (rot* Vector3.right), 0.15f);
-        //Gizmos.DrawSphere(tPos + (rot* Vector3.left), 0.15f);
-        //Gizmos.color = Color.green;
-        //Gizmos.DrawSphere(tPos + (rot* Vector3.up), 0.15f);
-        //Gizmos.DrawSphere(tPos + (rot* Vector3.up * 2f), 0.15f);
+            Vector3 tempDir = GetBezierDir(TValue, points[currIndex], points[currIndex + 1]);
+            Quaternion rot1 = Quaternion.LookRotation(tempDir);
+            Vector3 tempPos = GetBezierPosition(TValue, points[currIndex], points[currIndex + 1]);
+            Vector3 nextPos = GetBezierPosition(TValue, points[currIndex + 1], points[currIndex + 1]);
+            for (int i = 0; i < road2D.vertices.Length; i++)
+            {
+                Vector3 roadPoint = road2D.vertices[i].point;
+                Gizmos.DrawSphere(tempPos + rot1 * roadPoint, 0.25f);
+                if (i < road2D.vertices.Length - 1)
+                {
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawLine(tempPos + rot1 * roadPoint, tempPos + rot1 * road2D.vertices[i + 1].point);
+                    Gizmos.DrawLine(tempPos + rot1 * road2D.vertices[road2D.vertices.Length-1].point, tempPos + rot1 * road2D.vertices[0].point);
+                    //Gizmos.color = Color.blue;
+                }
+
+                Gizmos.DrawLine(tempPos + rot1 * roadPoint, nextPos + rot1 * roadPoint);
+            }
+            Gizmos.color = Color.red;
+
+            currIndex++;
+            //Debug.Log(currIndex);
+        }
+        currIndex = 0;
     }
 
     Vector3 GetBezierPosition(float t, BezierPoint bp1, BezierPoint bp2)
