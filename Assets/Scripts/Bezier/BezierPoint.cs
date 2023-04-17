@@ -8,7 +8,9 @@ public class BezierPoint : MonoBehaviour
     //public Transform anchor;
     public Transform control0;
     public Transform control1;
-    public Transform Anchor;
+
+    public bool tangentLock = false;
+    public Transform Anchor { get { return gameObject.transform; } }
 
 
     public void OnDrawGizmos()
@@ -18,6 +20,11 @@ public class BezierPoint : MonoBehaviour
         Gizmos.color = Color.white;
         Gizmos.DrawLine(transform.position, control0.position);
         Gizmos.DrawLine(transform.position, control1.position);
+
+        if(tangentLock)
+        {
+            control1.transform.localPosition = -control0.transform.localPosition;
+        }
 
         //Handles.DrawBezier
     }

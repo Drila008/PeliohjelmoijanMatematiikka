@@ -16,5 +16,5 @@ public class Mesh2D : ScriptableObject
 
     public Vertex[] vertices;
 
-    public int[] Line_indices;
+    public int[] lineIndices;
 }
