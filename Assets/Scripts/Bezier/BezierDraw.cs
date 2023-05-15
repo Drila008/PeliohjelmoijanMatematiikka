@@ -12,7 +12,7 @@ public class BezierDraw : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Handles.DrawBezier(point1.position, point2.position, tangent1.position, tangent2.position, Color.green, default, 3f);
+       // Handles.DrawBezier(point1.position, point2.position, tangent1.position, tangent2.position, Color.green, default, 3f);
 
 
 
